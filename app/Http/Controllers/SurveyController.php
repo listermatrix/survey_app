@@ -40,18 +40,13 @@ class SurveyController extends Controller
 
     public function results(Survey $survey): \Illuminate\Http\JsonResponse
     {
-        $results  = [
-            'survey' => $survey,
-            'questions' => $survey->questions->load('options'),
-            'answers' => $survey->questions->load('answers')->pluck('answers'),
-        ];
-
-        return $this->response($results,'Survey details successfully');
+        return $this->response( $survey->load(['questions','questions.options', 'questions.answers']),'Survey details successfully');
     }
 
     public function destroy(Survey $survey):  \Illuminate\Http\JsonResponse
     {
         $survey->questions()->answers()->delete();
+        $survey->questions()->options()->delete();
         $survey->questions()->delete();
         $survey->delete();
 
