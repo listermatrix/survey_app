@@ -10,7 +10,7 @@ class QuestionController extends Controller
 {
     public function index(): \Illuminate\Http\JsonResponse
     {
-        $question = Question::query()->with('survey')->latest()->paginate();
+        $question = Question::query()->with(['survey','options'])->latest()->paginate();
         return $this->response($question);
     }
 

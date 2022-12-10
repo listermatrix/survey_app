@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::resource('survey',SurveyController::class);
+Route::get('results/{survey}',[SurveyController::class,'results']);
 Route::resource('questions',QuestionController::class);
 Route::resource('options',OptionController::class);
 Route::resource('answers',AnswerController::class);

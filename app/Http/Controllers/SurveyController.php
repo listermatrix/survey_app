@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SurveyStoreRequest;
 use App\Http\Requests\SurveyUpdateRequest;
+use App\Models\QuestionOption;
 use App\Models\Survey;
 use Illuminate\Http\Request;
 
@@ -36,9 +37,21 @@ class SurveyController extends Controller
         return $this->response($survey->load('questions'),'Survey successfully updated');
     }
 
+
+    public function results(Survey $survey): \Illuminate\Http\JsonResponse
+    {
+        $results  = [
+            'survey' => $survey,
+            'questions' => $survey->questions->load('options'),
+            'answers' => $survey->questions->load('answers')->pluck('answers'),
+        ];
+
+        return $this->response($results,'Survey details successfully');
+    }
+
     public function destroy(Survey $survey):  \Illuminate\Http\JsonResponse
     {
-//        $survey->questions()->answers()->delete();
+        $survey->questions()->answers()->delete();
         $survey->questions()->delete();
         $survey->delete();
 
